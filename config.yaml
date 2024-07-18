@@ -1,0 +1,4 @@
+model_name: "glm-4"
+api_key: 'd72ffcd9e0******************OE1s9'
+base_url : 'https://open.bigmodel.cn/api/paas/v4/'
+source_file : 'D:\jupyter\alogrithm_chatbot\algorithm.txt'

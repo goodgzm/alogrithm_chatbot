@@ -1,0 +1,1916 @@
+
+-----1-----
+[算法名称]
+__int128读写模板子
+[算法代码]
+```
+inline __int128 read(){
+    __int128 x=0,f=1;
+    char ch=getchar();
+    while(ch<'0'||ch>'9'){
+        if(ch=='-')
+            f=-1;
+        ch=getchar();
+    }
+    while(ch>='0'&&ch<='9'){
+        x=x*10+ch-'0';
+        ch=getchar();
+    }
+    return x*f;
+}
+
+inline void print(__int128 x){
+    if(x<0){
+        putchar('-');
+        x=-x;
+    }
+    if(x>9)
+        print(x/10);
+    putchar(x%10+'0');
+}
+```
+
+
+-----2-----
+[算法名称]
+快速排序
+[算法代码]
+```
+void quick_sort(int q[], int l, int r)
+{
+    if (l >= r) return;
+ 
+    int i = l - 1, j = r + 1, x = q[l + r >> 1];
+    while (i < j)
+    {
+        do i ++ ; while (q[i] < x);
+        do j -- ; while (q[j] > x);
+        if (i < j) swap(q[i], q[j]);
+    }
+    quick_sort(q, l, j), quick_sort(q, j + 1, r);
+}
+```
+
+
+-----3-----
+[算法名称]
+归并排序
+[算法代码]
+```
+void merge_sort(int q[], int l, int r)
+{
+    if (l >= r) return;
+ 
+    int mid = l + r >> 1;
+    merge_sort(q, l, mid);
+    merge_sort(q, mid + 1, r);
+ 
+    int k = 0, i = l, j = mid + 1;
+    while (i <= mid && j <= r)
+        if (q[i] < q[j]) tmp[k ++ ] = q[i ++ ];
+        else tmp[k ++ ] = q[j ++ ];
+ 
+    while (i <= mid) tmp[k ++ ] = q[i ++ ];
+    while (j <= r) tmp[k ++ ] = q[j ++ ];
+ 
+    for (i = l, j = 0; i <= r; i ++, j ++ ) q[i] = tmp[j];
+}
+```
+
+
+-----4-----
+[算法名称]
+整数二分
+[算法代码]
+```
+bool check(int x) {/* ... */} 
+ 
+// 区间[l, r]被划分成[l, mid]和[mid + 1, r]时使用：
+int bsearch_1(int l, int r)
+{
+    while (l < r)
+    {
+        int mid = l + r >> 1;
+        if (check(mid)) r = mid; 
+        else l = mid + 1;
+    }
+    return l;
+}
+int bsearch_2(int l, int r)
+{
+    while (l < r)
+    {
+        int mid = l + r + 1 >> 1;
+        if (check(mid)) l = mid;
+        else r = mid - 1;
+    }
+    return l;
+}
+```
+
+
+-----5-----
+[算法名称]
+浮点数二分
+[算法代码] 
+```
+const double eps=1e-6;
+bool check(double x) {/* ... */} 
+ 
+double bsearch_3(double l,double r)
+{
+	while (r-l>eps)
+	{
+		double mid = (l + r) / 2;
+		if (check(mid))  r = mid;
+		else l = mid;
+	}
+	return l;
+}
+```
+
+
+-----6-----
+[算法名称]
+整数三分
+[算法代码]
+```
+//以凸函数位例子 
+int check(x){.....} 	//返回判断当前点对应的函数值 
+int bsearch_1(int l, int r)
+{
+    while (l < r-1)
+    {
+    	//三分的两个中点有两种写法
+		// m1 = l+(r-l)/3;
+		// m2 = r-(r-l)/3;
+        m1 = l+r>>1;
+        m2 = m1+r>>1;
+        if(check(m1) > check(m2)) r=m2;
+        else l=m1;
+    }
+    return l;
+}
+```
+
+
+-----7-----
+[算法名称]
+浮点数三分
+[算法代码]
+```
+//以凸函数位例子 
+double check(x){.....} 	//返回判断当前点对应的函数值 
+double bsearch_1(double l, double r)
+{
+    while (r-l>eps)
+    {
+    	//三分的两个中点有两种写法
+		// m1 = l+(r-l)/3;
+		// m2 = r-(r-l)/3;
+        m1 = (l+r)/2;
+        m2 = (m1+r)/2;
+        if(check(m1) > check(m2)) r=m2;
+        else l=m1;
+    }
+    return l;
+}
+```
+
+
+-----8-----
+[算法名称]
+高精度加法
+[算法代码]
+```
+vector<int> add(vector<int> &A, vector<int> &B)
+{
+    if (A.size() < B.size()) return add(B, A);
+ 
+    vector<int> C;
+    int t = 0;
+    for (int i = 0; i < A.size(); i ++ )
+    {
+        t += A[i];
+        if (i < B.size()) t += B[i];
+        C.push_back(t % 10);
+        t /= 10;
+    }
+ 
+    if (t) C.push_back(t);
+    return C;
+}
+```
+
+
+-----9-----
+[算法名称]
+高精度减法
+[算法代码]
+```
+vector<int> sub(vector<int> &A, vector<int> &B)
+{
+    vector<int> C;
+    for (int i = 0, t = 0; i < A.size(); i ++ )
+    {
+        t = A[i] - t;
+        if (i < B.size()) t -= B[i];
+        C.push_back((t + 10) % 10);
+        if (t < 0) t = 1;
+        else t = 0;
+    }
+ 
+    while (C.size() > 1 && C.back() == 0) C.pop_back();
+    return C;
+}
+```
+
+
+-----10-----
+[算法名称]
+高精度乘低精度
+[算法代码]
+```
+vector<int> mul(vector<int> &A, int b)
+{
+    vector<int> C;
+    int t = 0;
+    for (int i = 0; i < A.size() || t; i ++ )
+    {
+        if (i < A.size()) t += A[i] * b;
+        C.push_back(t % 10);
+        t /= 10;
+    }
+ 
+    return C;
+}
+```
+
+-----11-----
+[算法名称]
+高精度除以低精度
+[算法代码]
+```
+vector<int> div(vector<int> &A, int b, int &r)
+{
+    vector<int> C;
+    r = 0;
+    for (int i = A.size() - 1; i >= 0; i -- )
+    {
+        r = r * 10 + A[i];
+        C.push_back(r / b);
+        r %= b;
+    }
+    reverse(C.begin(), C.end());
+    while (C.size() > 1 && C.back() == 0) C.pop_back();
+    return C;
+}
+```
+
+-----13-----
+[算法名称]
+子矩阵的和
+[算法代码]
+```
+S[i, j] = 第i行j列格子左上部分所有元素的和（也就是矩阵前缀和）
+矩阵前缀和的求法：S[i, j] = S[i-1, j] + s[i, j-1] -s[i-1, j-1]
+以(x1, y1)为左上角，(x2, y2)为右下角的子矩阵的和为：
+S[x2, y2] - S[x1 - 1, y2] - S[x2, y1 - 1] + S[x1 - 1, y1 - 1]
+```
+
+-----14-----
+[算法名称]
+差分矩阵
+[算法代码]
+```
+简单的区间差分插入操作：
+void insert(int l,int r,int x)
+{
+    b[l]+=x,b[r+1]-=x;
+}
+给以(x1, y1)为左上角，(x2, y2)为右下角的子矩阵中的所有元素加上c：
+S[x1, y1] += c, S[x2 + 1, y1] -= c, S[x1, y2 + 1] -= c, S[x2 + 1, y2 + 1] += c
+```
+
+-----15-----
+[算法名称]
+双指针算法
+[算法代码]
+```
+for (int i = 0, j = 0; i < n; i ++ )
+{
+    while (j < i && check(i, j)) j ++ ;
+}
+```
+
+
+-----16-----
+[算法名称]
+数据离散化_保序离散化
+[算法代码]
+```
+vector<int> alls; 
+sort(alls.begin(), alls.end()); 
+alls.erase(unique(alls.begin(), alls.end()), alls.end()); 
+ 
+int find(int x) // 找到第一个大于等于x的位置
+{
+    int l = 0, r = alls.size() - 1;
+    while (l < r)
+    {
+        int mid = l + r >> 1;
+        if (alls[mid] >= x) r = mid;
+        else l = mid + 1;
+    }
+    return r + 1;
+}
+```
+
+-----17-----
+[算法名称]
+数据离散化_非保序离散化
+[算法代码]
+```
+unordered_map<int,int> mp;
+int res;
+int find(int x)
+{
+	if(mp.count(x)==0) return mp[x]=++res;
+	return mp[x];
+}
+```
+
+-----18-----
+[算法名称]
+RMQ
+[算法代码] 
+```
+const int N=2e5+7,M=20;
+int dp[N][M];
+int a[N];
+for(int j=0;j<M;j++)
+{
+    for(int i=1;i+(1<<j)-1<=n;i++)
+    {
+        if(!j) dp[i][j]=a[i];
+        else dp[i][j]=max(dp[i][j-1],dp[i+(1<<(j-1))][j-1]);
+    }
+}
+int res=log(b-a+1)/log(2);
+cout <<max(dp[a][res],dp[b-(1<<res)+1][res])<<endl;
+```
+
+-----19-----
+[算法名称]
+试除法判定质数
+[算法代码] 
+```
+bool is_prime(int x)
+{
+    if (x < 2) return false;
+    for (int i = 2; i <= x / i; i ++ )
+        if (x % i == 0)
+            return false;
+    return true;
+}
+```
+
+-----20-----
+[算法名称]
+试除法分解质因数
+[算法代码] 
+```
+void divide(int x)
+{
+    for (int i = 2; i <= x / i; i ++ )
+        if (x % i == 0)
+        {
+            int s = 0;
+            while (x % i == 0) x /= i, s ++ ;
+            cout << i << ' ' << s << endl;
+        }
+    if (x > 1) cout << x << ' ' << 1 << endl;
+    cout << endl;
+}
+```
+
+-----21-----
+[算法名称]
+朴素素数筛法
+[算法代码] 
+```
+int primes[N], cnt; 
+bool st[N];  
+ 
+void get_primes(int n)
+{
+    for (int i = 2; i <= n; i ++ )
+    {
+        if (st[i]) continue;
+        primes[cnt ++ ] = i;
+        for (int j = i + i; j <= n; j += i)
+            st[j] = true;
+    }
+}
+```
+
+-----22-----
+[算法名称]
+线性素数筛法
+[算法代码] 
+```
+int primes[N], cnt;  
+bool st[N];    
+void get_primes(int n)
+{
+    for (int i = 2; i <= n; i ++ )
+    {
+        if (!st[i]) primes[cnt ++ ] = i;
+        for (int j = 0; primes[j] <= n / i; j ++ )
+        {
+            st[primes[j] * i] = true;
+            if (i % primes[j] == 0) break;
+        }
+    }
+}
+```
+
+-----23-----
+[算法名称]
+区间素数筛法
+[算法代码] 
+```
+#define MAX_L 1000007
+#define MAX_SORT_B 1000007
+ 
+bool is_prime[MAX_L];
+bool is_prime_small[MAX_SORT_B];
+ 
+void segment_sieve(LL a,LL b)
+{
+    for(int i=0; (LL)i*i < b; i++)is_prime_small[i]=true;
+    for(int i=0; i<b-a; i++)is_prime[i]=true;
+    for(int i=2; (LL)i * i<b; i++)
+    {
+        if(is_prime_small[i])
+        {
+            for(int j=2*i; (LL)j * j < b; j += i)
+            {
+                is_prime_small[j]=false;
+            }
+            for(LL j=max(2LL, (a+i-1)/i)*i ; j<b; j+=i) 
+            {
+                is_prime[j - a] =false;
+            }
+        }
+    }
+}
+```
+
+-----24-----
+[算法名称]
+Min_25
+[算法代码] 
+```
+const int N=1000010;
+ 
+namespace Min25 {
+    int prime[N], id1[N], id2[N], flag[N], ncnt, m;
+    ll g[N], sum[N], a[N], T, n;
+    inline int ID(ll x) {
+        return x <= T ? id1[x] : id2[n / x];
+    }
+    inline ll calc(ll x) {
+        return x * (x + 1) / 2 - 1;
+    }
+    inline ll f(ll x) {
+        return x;
+    }
+    inline void init() {
+    	//for(int i=0;i<=N;i++) prime[i]=id1[i]=id2[i]=flag[i]=g[i]=sum[i]=a[i]=0,ncnt=0,m=0;
+    	ncnt=m=0;
+        T = sqrt(n + 0.5);
+        for (int i = 2; i <= T; i++) {
+            if (!flag[i]) prime[++ncnt] = i, sum[ncnt] = sum[ncnt - 1] + i;
+            for (int j = 1; j <= ncnt && i * prime[j] <= T; j++) {
+                flag[i * prime[j]] = 1;
+                if (i % prime[j] == 0) break;
+            }
+        }
+        for (ll l = 1; l <= n; l = n / (n / l) + 1) {
+            a[++m] = n / l;
+            if (a[m] <= T) id1[a[m]] = m; else id2[n / a[m]] = m;
+            g[m] = calc(a[m]);
+        }
+        for (int i = 1; i <= ncnt; i++) 
+            for (int j = 1; j <= m && (ll)prime[i] * prime[i] <= a[j]; j++) 
+                g[j] = g[j] - (ll)prime[i] * (g[ID(a[j] / prime[i])] - sum[i - 1]);
+    }
+ 
+    inline ll solve(ll x) {
+        if (x <= 1) return x;
+        return n = x, init(), g[ID(n)];
+    }
+}
+```
+
+
+-----25-----
+[算法名称]
+试除法求约数
+[算法代码] 
+```
+vector<int> get_divisors(int x)
+{
+    vector<int> res;
+    for (int i = 1; i <= x / i; i ++ )
+        if (x % i == 0)
+        {
+            res.push_back(i);
+            if (i != x / i) res.push_back(x / i);
+        }
+    sort(res.begin(), res.end());
+    return res;
+}
+```
+
+
+-----27-----
+[算法名称]
+欧几里得算法
+[算法代码] 
+```
+int gcd(int a, int b)
+{
+    return b ? gcd(b, a % b) : a;
+}
+```
+
+
+-----28-----
+[算法名称]
+欧拉函数
+[算法代码] 
+```
+//1 ~ N 中与 N 互质的数的个数被称为欧拉函数，记为ϕ(N)；
+int phi(int x)
+{
+    int res = x;
+    for (int i = 2; i <= x / i; i ++ )
+        if (x % i == 0)
+        {
+            res = res / i * (i - 1);
+            while (x % i == 0) x /= i;
+        }
+    if (x > 1) res = res / x * (x - 1);
+ 
+    return res;
+}
+```
+
+
+-----29-----
+[算法名称]
+筛法求欧拉函数
+[算法代码] 
+```
+void get_eulers(int n)
+{
+    euler[1] = 1;
+    for (int i = 2; i <= n; i ++ )
+    {
+        if (!st[i])
+        {
+            primes[cnt ++ ] = i;
+            euler[i] = i - 1;
+        }
+        for (int j = 0; primes[j] <= n / i; j ++ )
+        {
+            int t = primes[j] * i;
+            st[t] = true;
+            if (i % primes[j] == 0)
+            {
+                euler[t] = euler[i] * primes[j];
+                break;
+            }
+            euler[t] = euler[i] * (primes[j] - 1);
+        }
+    }
+}
+```
+ 
+
+-----30-----
+[算法名称]
+卡特兰数求模
+[算法代码] 
+```
+const int C_maxn = 1e4 + 10;
+LL CatalanNum[C_maxn];
+LL inv[C_maxn];
+inline void Catalan_Mod(int N, LL mod)
+{
+    inv[1] = 1;
+    for(int i=2; i<=N+1; i++)
+        inv[i] = (mod - mod / i) * inv[mod % i] % mod;
+ 
+    CatalanNum[0] = CatalanNum[1] = 1;
+ 
+    for(int i=2; i<=N; i++)
+        CatalanNum[i] = CatalanNum[i-1] * (4 * i - 2) %mod * inv[i+1] %mod;
+}
+```
+
+
+-----31-----
+[算法名称]
+快速求第n位卡特兰数
+[算法代码] 
+```
+const long long M=1000000007;
+long long inv[1000010];
+long long last,now=1;
+ 
+void init()
+{
+    inv[1]=1;
+    for(int i=2;i<=n+1;i++)inv[i]=(M-M/i)*inv[M%i]%M;
+}
+ 
+int main()
+{
+    scanf("%lld",&n);
+    init();
+    for(int i=2;i<=n;i++)
+    {
+        last=now;
+        now=last*(4*i-2)%M*inv[i+1]%M;
+    }
+    printf("%lld\n",last);
+    return 0;
+}
+```
+
+
+-----32-----
+[算法名称]
+Java大数打表卡特兰数
+[算法代码] 
+```
+import java.io.*;  
+import java.math.BigInteger;  
+import java.util.*; 
+ 
+public class Main {
+	
+    public static void main(String[] args) {
+    	Scanner cin=new Scanner(System.in);
+    	BigInteger s[]=new BigInteger[105];
+    	s[1]=BigInteger.ONE;
+    	for(int i=2;i<105;i++){
+    		s[i]=s[i-1].multiply(BigInteger.valueOf((4*i-2))).divide(BigInteger.valueOf(i+1));
+    	}
+    	while(cin.hasNext()){
+    		int n=cin.nextInt();
+    		System.out.println(s[n]);
+    	}
+     }
+}
+```
+
+
+-----33-----
+[算法名称]
+快速幂
+[算法代码] 
+```
+long long pow(long long m, long long k, long long p){
+        long long res = 1 % p, t = m;
+        while (k>0)
+        {
+            if ((k&1)>0) res = res * t % p;
+            t = t * t % p;
+            k >>= 1;
+        }
+        return res%p;
+}
+```
+
+
+-----34-----
+[算法名称]
+位运算处理大数相乘
+[算法代码] 
+```
+ll quick_add(ll a,ll b,ll p)
+{
+	ll res=0;
+	while(b)
+	{
+		if(b&1) res=(res+a)%p;
+		a=(a+a)%p;
+		b>>=1;
+	}
+	return res;
+}
+```
+
+
+-----35-----
+[算法名称]
+扩展欧几里得算法
+[算法代码] 
+```
+int exgcd(int a, int b, int &x, int &y)
+{
+    if (!b)
+    {
+        x = 1; y = 0;
+        return a;
+    }
+    int d = exgcd(b, a % b, y, x);
+    y -= (a/b) * x;
+    return d;
+}
+```
+
+
+-----36-----
+[算法名称]
+高斯消元
+[算法代码] 
+```
+// a[N][N]是增广矩阵
+int gauss()
+{
+    int c, r;
+    for (c = 0, r = 0; c < n; c ++ )
+    {
+        int t = r;
+        for (int i = r; i < n; i ++ ) 
+            if (fabs(a[i][c]) > fabs(a[t][c]))
+                t = i;
+        if (fabs(a[t][c]) < eps) continue;
+        for (int i = c; i <= n; i ++ ) swap(a[t][i], a[r][i]); 
+        for (int i = n; i >= c; i -- ) a[r][i] /= a[r][c]; 
+        for (int i = r + 1; i < n; i ++ ) 
+            if (fabs(a[i][c]) > eps)
+                for (int j = n; j >= c; j -- )
+                    a[i][j] -= a[r][j] * a[i][c];
+ 
+        r ++ ;
+    }
+    if (r < n)
+    {
+        for (int i = r; i < n; i ++ )
+            if (fabs(a[i][n]) > eps)
+                return 2; 
+        return 1;
+    }
+    for (int i = n - 1; i >= 0; i -- )
+        for (int j = i + 1; j < n; j ++ )
+            a[i][n] -= a[i][j] * a[j][n];
+    return 0; 
+}
+```
+
+
+-----37-----
+[算法名称]
+递归法求组合数
+[算法代码] 
+```
+void init(int x,int y)
+{
+	C[0][0]=C[1][0] = C[1][1] = 1;
+	for (int i = 2; i <=x; i++)
+	{
+		C[i][0] = 1;
+		for (int j = 1; j <=y; j++)
+			C[i][j] = (C[i - 1][j] + C[i - 1][j - 1])%mod;
+	}
+}
+```
+
+
+-----38-----
+[算法名称]
+预处理逆元的方式求组合数
+[算法代码] 
+```
+int qmi(int a, int k, int p)
+{
+    int res = 1;
+    while (k)
+    {
+        if (k & 1) res = (LL)res * a % p;
+        a = (LL)a * a % p;
+        k >>= 1;
+    }
+    return res;
+}
+fact[0] = infact[0] = 1;
+for (int i = 1; i < N; i ++ )
+{
+    fact[i] = (LL)fact[i - 1] * i % mod;
+    infact[i] = (LL)infact[i - 1] * qmi(i, mod - 2, mod) % mod;
+}
+```
+
+
+-----39-----
+[算法名称]
+Lucas定理
+[算法代码] 
+```
+int qmi(int a, int k)       // 快速幂模板
+{
+    int res = 1;
+    while (k)
+    {
+        if (k & 1) res = (LL)res * a % p;
+        a = (LL)a * a % p;
+        k >>= 1;
+    }
+    return res;
+}
+ 
+int C(int a, int b)     // 通过定理求组合数C(a, b)
+{
+    int res = 1;
+    for (int i = 1, j = a; i <= b; i ++, j -- )
+    {
+        res = (LL)res * j % p;
+        res = (LL)res * qmi(i, p - 2) % p;
+    }
+    return res;
+}
+ 
+ 
+int lucas(LL a, LL b)
+{
+    if (a < p && b < p) return C(a, b);
+    return (LL)C(a % p, b % p) * lucas(a / p, b / p) % p;
+}
+```
+
+
+-----40-----
+[算法名称]
+有向图的拓扑序
+[算法代码] 
+```
+bool topsort()
+{
+    for(int i=1;i<=n;i++)
+    {
+        if(inv[i]==0) q.push(i);
+    }
+    while(!q.empty())
+    {
+        int res=q.front();
+        q.pop();
+        p.push(res);
+        for(int i=h[res];i!=-1;i=ne[i])
+        {
+            int j=e[i];
+            inv[j]--;
+            if(inv[j]==0) q.push(j);
+        }
+    }
+    if(p.size()==n) return true; 
+    else return false;
+}
+```
+
+
+
+-----41-----
+[算法名称]
+树的直径 
+[算法代码] 
+```
+//树的直径求法有很多：
+//两次BFS或者两次DFS；树形DP 
+//树形DP的基本思路：
+int h[N],e[N<<1],ne[N<<1],w[N<<1],idx;
+int d[2][N],dmax;
+void add(int a,int b,int c)
+{
+	e[idx]=b,ne[idx]=h[a],w[idx]=c,h[a]=idx++;
+}
+void dfs(int u,int fa)
+{
+	for(int i=h[u];~i;i=ne[i])
+	{		int j=e[i];
+		if(j==fa) continue;
+		dfs(j,u);
+		if(d[0][u]<d[0][j]+w[i]) d[1][u]=d[0][u],d[0][u]=d[0][j]+w[i];
+		else if(d[1][u]<d[0][j]+w[i]) d[1][u]=d[0][j]+w[i];
+		dmax=max(dmax,d[0][u]+d[1][u]);
+	}
+}
+```
+
+
+-----42-----
+[算法名称]
+朴素版Dijkstra
+[算法代码] 
+```
+int dijkstra()
+{
+    memset(dist, 0x3f, sizeof dist);
+    dist[1] = 0;
+ 
+    for (int i = 0; i < n - 1; i ++ )
+    {
+        int t = -1;     
+        for (int j = 1; j <= n; j ++ )
+            if (!st[j] && (t == -1 || dist[t] > dist[j]))
+                t = j;
+
+        for (int j = 1; j <= n; j ++ )
+            dist[j] = min(dist[j], dist[t] + g[t][j]);
+ 
+        st[t] = true;
+    }
+ 
+    if (dist[n] == 0x3f3f3f3f) return -1;
+    return dist[n];
+}
+```
+
+
+-----43---
+[算法名称]
+堆优化版Dijkstra
+[算法代码] 
+```
+int dijkstra()
+{
+    memset(dist, 0x3f, sizeof dist);
+    dist[1] = 0;
+    priority_queue<PII, vector<PII>, greater<PII>> heap;
+    heap.push({0, 1});   
+ 
+    while (heap.size())
+    {
+        auto t = heap.top();
+        heap.pop();
+ 
+        int ver = t.second, distance = t.first;
+ 
+        if (st[ver]) continue;
+        st[ver] = true;
+ 
+        for (int i = h[ver]; i != -1; i = ne[i])
+        {
+            int j = e[i];
+            if (dist[j] > distance + w[i])
+            {
+                dist[j] = distance + w[i];
+                heap.push({dist[j], j});
+            }
+        }
+    }
+ 
+    if (dist[n] == 0x3f3f3f3f) return -1;
+    return dist[n];
+}
+```
+
+
+-----44-----
+[算法名称]
+朴素版spfa
+[算法代码] 
+```
+void spfa()
+{
+    int hh = 0, tt = 0;
+    for (int i = 1; i <= n; i++) dist[i] = INF;
+    dist[1] = 0;
+    q[tt++] = 1, st[1] = 1;
+    while (hh != tt)
+    {
+        int t = q[hh++];
+        st[t] = 0;
+        if (hh == n) hh = 0;
+        for (int i = h[t]; i != -1; i = ne[i])
+            if (dist[e[i]] > dist[t] + v[i])
+            {
+                dist[e[i]] = dist[t] + v[i];
+                if (!st[e[i]])
+                {
+                    st[e[i]] = 1;
+                    q[tt++] = e[i];
+                    if (tt == n) tt = 0;
+                }
+            }
+    }
+}
+```
+
+
+-----45-----
+[算法名称]
+SFA优化版的spfa
+[算法代码] 
+```
+void spfa(int root,int dist[])
+{
+    memset(dist,0x3f,sizeof dis);
+    dist[root] = 0;
+    memset(st, false, sizeof st);
+    deque<int> q;
+    q.push_back(root);
+    st[root]=true;
+    while (q.size())
+    {
+        int res=q.front();
+        q.pop_front();
+        st[res]=false;
+        for(int i=h[res];i!=-1;i=ne[i])
+        {
+            int j=e[i];
+            if(dist[j]>dist[res]+w[i])
+            {
+                dist[j]=dist[res]+w[i];
+                if(!st[j])
+                {
+                    st[j]=true;
+                    if(dist[j]>dist[q.front()]) q.push_back(j);
+                    else q.push_front(j);
+                }
+            }
+        }
+    }
+}
+```
+
+
+-----46-----
+[算法名称]
+SPFA判负环正环
+[算法代码] 
+```
+bool spfa()
+{
+    memset(dis,0,sizeof dis);
+    memset(st,false,sizeof st);
+    memset(cnt,0,sizeof cnt);
+    queue<int> q;
+    for(int i=0;i<=n;i++) q.push(i),st[i]=true;
+    int count=0;
+    while(q.size())
+    {
+        int t=q.front();
+        st[t]=false;
+        q.pop();
+        for(int i=h[t];i!=-1;i=ne[i])
+        {
+            int j=e[i];
+            if(dis[j]>dis[t]+w[i])
+            {
+                dis[j]=dis[t]+w[i];
+                cnt[j]=cnt[t]+1;
+                if(cnt[j]>=n) return true;
+                if(!st[j])
+                {
+                    q.push(j);
+                    st[j]=true;
+                }
+            }
+        }
+    }
+    return false;
+}
+```
+
+
+-----47-----
+[算法名称]
+loyd算法 O(n^3)
+[算法代码] 
+```
+int main()
+{
+    cin >> m >> n;
+    for (int i = 1; i <= n; i++)
+        for (int j = 1; j <= n; j++)
+            d[i][j] = i == j ? 0 : INF;
+    for (int i = 0; i < m; i++)
+    {
+        int a, b, c;
+        cin >> a >> b >> c;
+        d[a][b] = d[b][a] = min(c, d[a][b]);
+    }
+    // floyd 算法核心
+    for (int k = 1; k <= n; k++)
+        for (int i = 1; i <= n; i++)
+            for (int j = 1; j <= n; j++)
+                d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
+    cout << d[1][n] << endl;
+    return 0;
+}
+```
+
+
+-----48-----
+[算法名称]
+prim算法
+[算法代码] 
+```
+int prim()
+{
+    memset(dist, 0x3f, sizeof dist);
+ 
+    int res = 0;
+    for (int i = 0; i < n; i ++ )
+    {
+        int t = -1;
+        for (int j = 1; j <= n; j ++ )
+            if (!st[j] && (t == -1 || dist[t] > dist[j]))
+                t = j;
+ 
+        if (i && dist[t] == INF) return INF;
+ 
+        if (i) res += dist[t];
+        st[t] = true;
+ 
+        for (int j = 1; j <= n; j ++ ) dist[j] = min(dist[j], g[t][j]);
+    }
+ 
+    return res;
+}
+```
+
+
+-----49-----
+[算法名称]
+kruskal算法
+[算法代码] 
+```
+struct Edge 
+{
+    int a, b, w;
+ 
+    bool operator< (const Edge &W)const
+    {
+        return w < W.w;
+    }
+}edges[M];
+ 
+int find(int x)    
+{
+    if (p[x] != x) p[x] = find(p[x]);
+    return p[x];
+}
+ 
+int kruskal()
+{
+    sort(edges, edges + m);
+ 
+    for (int i = 1; i <= n; i ++ ) p[i] = i;  
+ 
+    int res = 0, cnt = 0;
+    for (int i = 0; i < m; i ++ )
+    {
+        int a = edges[i].a, b = edges[i].b, w = edges[i].w;
+ 
+        a = find(a), b = find(b);
+        if (a != b)     
+        {
+            p[a] = b;
+            res += w;
+            cnt ++ ;
+        }
+    }
+ 
+    if (cnt < n - 1) return INF;
+    return res;
+}
+```
+
+
+-----50-----
+[算法名称]
+最小生成森林
+[算法代码] 
+```
+int prim()
+{
+    memset(dist, 0x3f, sizeof dist);
+ 
+    int res = 0;
+    for (int i = 0; i < n; i ++ )
+    {
+        int t = -1;
+        for (int j = 1; j <= n; j ++ )
+            if (!st[j] && (t == -1 || dist[t] > dist[j]))
+                t = j;
+        st[t] = true;
+        for (int j = 1; j <= n; j ++ ) dist[j] = min(dist[j], g[t][j]);
+        if(i&&dist[t]==0x3f3f3f3f) continue;
+        if (i) res += dist[t];
+    }
+ 
+    return res;
+}
+```
+
+
+-----51-----
+[算法名称]
+倍增在线算法
+[算法代码] 
+```
+void bfs(int root)
+{
+    memset(depth,0x3f,sizeof depth);
+    queue<int> q;
+    q.push(root);
+    depth[0]=0,depth[root]=1;
+    while(q.size())
+    {
+        int t=q.front();
+        q.pop();
+        for(int i=h[t];~i;i=ne[i])
+        {
+            int j=e[i];
+            if(depth[j]>depth[t]+1)
+            {
+                depth[j]=depth[t]+1;
+                fa[j][0]=t;
+                q.push(j);
+                for(int k=1;k<16;k++)
+                    fa[j][k]=fa[fa[j][k-1]][k-1];
+            }
+        }
+    }
+}
+int lca(int a,int b)
+{
+    if(depth[a]<depth[b]) swap(a,b);
+    for(int k=15;k>=0;k--)
+        if(depth[fa[a][k]]>=depth[b]) 
+            a=fa[a][k];
+    if(a==b) return a;
+    for(int k=15;k>=0;k--)
+    {
+        if(fa[a][k]!=fa[b][k])
+        {
+            a=fa[a][k];
+            b=fa[b][k];
+        }
+    }
+    return fa[a][0];
+}
+```
+
+
+-----52-----
+[算法名称]
+targin离线算法
+[算法代码] 
+```
+vector<PII> query[N];  
+ 
+void dfs(int u,int fa)
+{
+    for(int i=h[u];~i;i=ne[i])
+    {
+        int j=e[i];
+        if(j==fa) continue;
+        dis[j]=dis[u]+w[i];
+        dfs(j,u);
+    }
+}
+int find(int x)
+{
+    if(x!=p[x]) p[x]=find(p[x]);
+    return p[x];
+}
+void targin(int u)
+{
+    st[u]=1;    
+    for(int i=h[u];~i;i=ne[i])
+    {
+        int j=e[i];
+        if(!st[j])    
+        {
+            targin(j);
+            p[j]=u;   
+        }
+    }
+    for(auto it : quiry[u]) 
+    {
+        int x=u,y=it.first,id=it.second;
+        if(st[y]==2)
+        {
+            int lca=find(y);
+            ans[id]=dis[x]+dis[y]-2*dis[lca];
+        }
+    }
+    st[u]=2; 
+}
+```
+
+
+-----53-----
+[算法名称]
+有向图的强连通分量
+[算法代码] 
+```
+void add(int a, int b)
+{
+    e[idx] = b, ne[idx] = h[a], h[a] = idx ++ ;
+}
+ 
+void tarjan(int u)
+{
+    dfn[u] = low[u] = ++ timestamp;
+    stk[ ++ top] = u, in_stk[u] = true;
+ 
+    for (int i = h[u]; ~i; i = ne[i])
+    {
+        int j = e[i];
+        if (!dfn[j])
+        {
+            tarjan(j);
+            low[u] = min(low[u], low[j]);
+        }
+        else if (in_stk[j])
+            low[u] = min(low[u], dfn[j]);
+    }
+ 
+    if (dfn[u] == low[u])
+    {
+        ++ scc_cnt;
+        int y;
+        do {
+            y = stk[top -- ];
+            in_stk[y] = false;
+            id[y] = scc_cnt;
+            //size_scc[scc_cnt]++;
+        } while (y != u);
+    }
+}
+for(int i=1;i<=n;i++)
+    {
+        if(!dfn[i])
+            tarjan(i);
+    }
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=h[i];~j;j=ne[j])
+        {
+            int k=e[j];
+            int a=id[i],b=id[k];
+            if(a!=b) dout[a]++;
+        }
+    }
+```
+
+
+-----54-----
+[算法名称]
+无向图的点双连通分量
+[算法代码] 
+```
+void add(int a, int b)
+{
+    e[idx] = b, ne[idx] = h[a], h[a] = idx ++ ;
+}
+ 
+void tarjan(int u)
+{
+    dfn[u] = low[u] = ++ timestamp;
+    stk[ ++ top] = u;
+ 
+    if (u == root && h[u] == -1)
+    {
+        dcc_cnt ++ ;
+        dcc[dcc_cnt].push_back(u);
+        return;
+    }
+ 
+    int cnt = 0;
+    for (int i = h[u]; ~i; i = ne[i])
+    {
+        int j = e[i];
+        if (!dfn[j])
+        {
+            tarjan(j);
+            low[u] = min(low[u], low[j]);
+            if (dfn[u] <= low[j])
+            {
+                cnt ++ ;
+                if (u != root || cnt > 1) cut[u] = true;
+                ++ dcc_cnt;
+                int y;
+                do {
+                    y = stk[top -- ];
+                    dcc[dcc_cnt].push_back(y);
+                } while (y != j);
+                dcc[dcc_cnt].push_back(u);
+            }
+        }
+        else low[u] = min(low[u], dfn[j]);
+    }
+}
+ 
+int main()
+{
+    int T = 1;
+    while (cin >> m, m)
+    {
+        for (int i = 1; i <= dcc_cnt; i ++ ) dcc[i].clear();
+        idx = n = timestamp = top = dcc_cnt = 0;
+        memset(h, -1, sizeof h);
+        memset(dfn, 0, sizeof dfn);
+        memset(cut, 0, sizeof cut);
+        while (m -- )
+        {
+            int a, b;
+            cin >> a >> b;
+            n = max(n, a), n = max(n, b);
+            add(a, b), add(b, a);
+        }
+ 
+        for (root = 1; root <= n; root ++ )
+            if (!dfn[root])
+                tarjan(root);
+    }
+}
+```
+
+
+-----55-----
+[算法名称]
+二分图
+[算法代码] 
+```
+bool dfs(int u, int c)
+{
+    color[u] = c;
+    for (int i = h[u]; i != -1; i = ne[i])
+    {
+        int j = e[i];
+        if (color[j] == -1)
+        {
+            if (!dfs(j, !c)) return false;
+        }
+        else if (color[j] == c) return false;
+    }
+ 
+    return true;
+}
+ 
+bool check()
+{
+    memset(color, -1, sizeof color);
+    bool flag = true;
+    for (int i = 1; i <= n; i ++ )
+        if (color[i] == -1)
+            if (!dfs(i, 0))
+            {
+                flag = false;
+                break;
+            }
+    return flag;
+}
+```
+
+
+-----56-----
+[算法名称]
+匈牙利算法
+[算法代码] 
+```
+bool find(int x)
+{
+    for (int i = h[x]; i != -1; i = ne[i])
+    {
+        int j = e[i];
+        if (!st[j])
+        {
+            st[j] = true;
+            if (match[j] == 0 || find(match[j]))
+            {
+                match[j] = x;
+                return true;
+            }
+        }
+    }
+ 
+    return false;
+}
+
+int res = 0;
+for (int i = 1; i <= n1; i ++ )
+{
+    memset(st, false, sizeof st);
+    if (find(i)) res ++ ;
+}
+```
+
+
+-----57-----
+[算法名称]
+单链表
+[算法代码] 
+```
+int head, e[N], ne[N], idx;
+void init()
+{
+    head = -1;
+    idx = 0;
+}
+void insert(int a)
+{
+    e[idx] = a, ne[idx] = head, head = idx ++ ;
+}
+void remove()
+{
+    head = ne[head];
+}
+```
+
+
+-----58-----
+[算法名称]
+双链表
+[算法代码] 
+```
+void init()
+{
+    r[0] = 1, l[1] = 0;
+    idx = 2;
+}
+ 
+void insert(int a, int x)
+{
+    e[idx] = x;
+    l[idx] = a, r[idx] = r[a];
+    l[r[a]] = idx, r[a] = idx ++ ;
+}
+ 
+void remove(int a)
+{
+    l[r[a]] = l[a];
+    r[l[a]] = r[a];
+}
+```
+
+
+-----59-----
+[算法名称]
+单调栈
+[算法代码]
+```
+int tt = 0;
+for (int i = 1; i <= n; i ++ )
+{
+    while (tt && check(stk[tt], i)) tt -- ;
+    stk[ ++ tt] = i;
+}
+```
+
+
+-----60-----
+[算法名称]
+单调队列
+[算法代码]
+```
+int hh = 0, tt = -1;
+for (int i = 0; i < n; i ++ )
+{
+    while (hh <= tt && check_out(q[hh])) hh ++ ;  // 判断队头是否滑出窗口
+    while (hh <= tt && check(q[tt], i)) tt -- ;
+    q[ ++ tt] = i;
+}
+```
+
+-----61-----
+[算法名称]
+朴素并查集
+[算法代码]
+```
+    int p[N]; 
+ 
+    int find(int x)
+    {
+        if (p[x] != x) p[x] = find(p[x]);
+        return p[x];
+    }
+ 
+    for (int i = 1; i <= n; i ++ ) p[i] = i;
+ 
+    p[find(a)] = find(b);
+```
+ 
+
+-----62-----
+[算法名称]
+维护size的并查集
+[算法代码]
+```
+    int p[N], size[N];
+    int find(int x)
+    {
+        if (p[x] != x) p[x] = find(p[x]);
+        return p[x];
+    }
+    for (int i = 1; i <= n; i ++ )
+    {
+        p[i] = i;
+        size[i] = 1;
+    }
+ 
+    size[find(b)] += size[find(a)];
+    p[find(a)] = find(b);
+```
+ 
+
+-----63-----
+[算法名称]
+维护到祖宗节点距离的并查集
+[算法代码]
+```
+    int p[N], d[N];
+    int find(int x)
+    {
+        if (p[x] != x)
+        {
+            int u = find(p[x]);
+            d[x] += d[p[x]];
+            p[x] = u;
+        }
+        return p[x];
+    }
+ 
+    for (int i = 1; i <= n; i ++ )
+    {
+        p[i] = i;
+        d[i] = 0;
+    }
+ 
+    p[find(a)] = find(b);
+    d[find(a)] = distance; 
+```
+
+
+-----64-----
+[算法名称]
+字符串哈希
+[算法代码]
+```
+typedef unsigned long long ULL;
+ULL h[N], p[N]; 
+ 
+p[0] = 1;
+for (int i = 1; i <= n; i ++ )
+{
+    h[i] = h[i - 1] * P + str[i];
+    p[i] = p[i - 1] * P;
+}
+ 
+ULL get(int l, int r)
+{
+    return h[r] - h[l - 1] * p[r - l + 1];
+}
+```
+
+
+-----65-----
+[算法名称]
+KMP
+[算法代码]
+```
+const int N=1e6+7;
+char p[N],s[N];
+int ne[N];int main()
+{
+	int n;cin >>n>>p+1; 
+	int m;cin >>m>>s+1;
+	for(int i=2,j=0;i<=n;i++)
+	{
+		while(j&&p[i]!=p[j+1]) j=ne[j];
+		if(p[i]==p[j+1]) j++;
+		ne[i]=j;
+	} 
+	for(int i=1,j=0;i<=m;i++)
+	{
+		while(j&&s[i]!=p[j+1]) j=ne[j];
+		if(s[i]==p[j+1]) j++;
+		//max_p=max(max_p,j);
+		if(j==n)
+		{
+			cout <<i-n<<" ";
+			j=ne[j];
+		} 
+	}
+}
+```
+
+
+-----66-----
+[算法名称]
+线段树(单点修改)
+[算法代码]
+```
+int n,m;
+ 
+struct node
+{
+	int l,r;  
+	int sum;   
+	int lmax; 
+	int rmax; 
+	int tmax;  
+}tr[N*4];
+ 
+void pushup(node &u,node &l,node &r)
+{
+	u.sum=l.sum+r.sum;
+	u.lmax=max(l.lmax,l.sum+r.lmax); 
+	u.rmax=max(r.rmax,r.sum+l.rmax);
+	u.tmax=max(max(l.tmax,r.tmax),l.rmax+r.lmax);
+}
+ 
+void pushup(int u)
+{
+	pushup(tr[u],tr[u<<1],tr[u<<1|1]);
+}
+ 
+void build(int u,int l,int r)
+{
+	if(l==r) tr[u]={l,r,w[r],w[r],w[r],w[r]};
+	else
+	{	tr[u]={l,r};
+		int mid=l+r>>1;	
+		build(u<<1,l,mid);	
+		build(u<<1|1,mid+1,r);
+		pushup(u);
+	}
+}
+ 
+void modify(int u,int x,int v)
+{
+	if(tr[u].l==x&&tr[u].r==x)  tr[u] = {x,x,v,v,v,v}; 
+	else 
+	{
+		int mid=tr[u].l+tr[u].r>>1;	
+		if(x<=mid) modify(u<<1,x,v);
+		else modify(u<<1|1,x,v);	
+		pushup(u);	
+	}
+}
+ 
+node query(int u,int l,int r) 
+{
+	if(tr[u].l>=l&&tr[u].r<=r) return tr[u]; 
+	else
+	{	
+		int mid=tr[u].l+tr[u].r>>1;  
+		if(r<=mid) return query(u<<1,l,r);
+		else if(l>mid) return query(u<<1|1,l,r); 
+		else 
+		{
+			auto left=query(u<<1,l,r);   
+			auto right=query(u<<1|1,l,r);	
+			node res;
+			pushup(res,left,right);  
+			return res;
+		}	
+	}
+}
+```
+
+-----67-----
+[算法名称]
+线段树(区间修改)
+[算法代码]
+```
+struct node
+{
+	ll l,r;  
+	ll sum;
+	ll add;	
+	ll mul;
+}tr[N*4];
+void eval(node &root,int add,int mul)
+{
+    root.sum=(root.sum*mul+(root.r-root.l+1)*add)%p;
+    root.mul=root.mul*mul%p;
+    root.add=(root.add*mul+add)%p;
+}
+void pushup(int u)
+{
+	tr[u].sum=(tr[u<<1].sum+tr[u<<1|1].sum)%p;
+}
+void pushdown(int u)
+{
+    eval(tr[u<<1],tr[u].add,tr[u].mul);
+    eval(tr[u<<1|1],tr[u].add,tr[u].mul);
+    tr[u].add=0,tr[u].mul=1;
+}
+void build(int u,int l,int r)
+{
+	if(l==r) tr[u]={l,r,w[r],0,1};
+	else
+	{	tr[u]={l,r,0,0,1};	
+		int mid=l+r>>1;	
+		build(u<<1,l,mid);
+		build(u<<1|1,mid+1,r);	
+		pushup(u);	
+	}
+}
+ 
+void modify(int u,int l,int r,int add,int mul)
+{
+	if(tr[u].l>=l&&tr[u].r<=r)
+	{
+		eval(tr[u],add,mul);
+	}
+	else 
+	{
+		pushdown(u);
+		int mid=tr[u].l+tr[u].r>>1;	
+		if(l<=mid) modify(u<<1,l,r,add,mul); 
+		if(r>mid) modify(u<<1|1,l,r,add,mul);	
+		pushup(u);
+	}
+}
+ 
+node query(int u,int l,int r)   
+{
+	if(tr[u].l>=l&&tr[u].r<=r) return tr[u];
+	else
+	{	
+	    pushdown(u);
+		node res;
+		res.sum=0;
+		int mid=tr[u].l+tr[u].r>>1; 
+		if(l<=mid) res.sum+=query(u<<1,l,r).sum%p;
+		if(r>mid) res.sum+=query(u<<1|1,l,r).sum%p;
+		pushup(u);
+		return res;
+	}
+}
+```
+
+
+-----68-----
+[算法名称]
+树状数组
+[算法代码]
+```
+int lowbit(int x)
+{
+	return x&-x;
+}
+void modify(int x,int c)//修改树状数组x位置的值
+{
+	for(int i=x;i<=n;i+=lowbit(i)) tr[i]+=c;
+}
+int query(int x)//查询区间1~x的区间和；
+{
+	int res=0;
+	for(int i=x;i>=1;i-=lowbit(i)) res+=tr[i];
+	return res; 
+}
+```
+
+
+-----69-----
+[算法名称]
+Trie树
+[算法代码]
+```
+void insert(char *str)
+{
+    int p = 0;
+    for (int i = 0; str[i]; i++)
+    {
+        int u = str[i] - '0';
+        if (!son[p][u]) son[p][u] = ++idx;
+        p = son[p][u];
+    }
+    cnt[p]++;
+}
+ 
+int query(char *str)
+{
+    int p = 0;
+    for (int i = 0; str[i]; i++)
+    {
+        int u = str[i] - '0';
+        if (!son[p][u]) return 0;
+        p = son[p][u];
+    }
+    return cnt[p];
+}
+```
